@@ -1,20 +1,20 @@
+// src/services/foodService.ts
 import axios from 'axios';
+import { Food, FoodDetails } from '../types/foodTypes';
 
-const api = axios.create({
-  baseURL: 'http://localhost:3021',
-});
+const API_URL = 'http://localhost:3021/food';
 
-export const searchFood = async (term: string) => {
-  const response = await api.get(`/food/search?term=${term}`);
-  return Array.isArray(response.data) ? response.data : [];
+export const searchFood = async (term: string): Promise<Food[]> => {
+  const response = await axios.get(`${API_URL}/search`, { params: { term } });
+  return response.data.items; // Retorna apenas o array de alimentos
 };
 
-export const getFoodDetails = async (id: number) => {
-  const response = await api.get(`/food/get?idfood=${id}`);
+export const getFoodDetails = async (id: number): Promise<FoodDetails> => {
+  const response = await axios.get(`${API_URL}/get`, { params: { idfood: id } });
   return response.data;
 };
 
-export const listFoods = async (page: number, pageSize: number) => {
-  const response = await api.get(`/food/list?page=${page}&pagesize=${pageSize}`);
-  return response.data;
+export const listFoods = async (page: number, pageSize: number): Promise<Food[]> => {
+  const response = await axios.get(`${API_URL}/list`, { params: { page, pagesize: pageSize } });
+  return response.data.items; // Retorna apenas o array de alimentos
 };

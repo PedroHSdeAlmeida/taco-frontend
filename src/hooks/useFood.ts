@@ -1,16 +1,13 @@
-import { useFood } from '../contexts/FoodContext';
+// src/hooks/useFood.ts
+import { useContext } from 'react';
+import { FoodContext } from '../contexts/FoodContext';
 
-export const useSearchFood = () => {
-  const { search, foods } = useFood();
-  return { search, foods };
+const useFood = () => {
+  const context = useContext(FoodContext);
+  if (!context) {
+    throw new Error('useFood must be used within a FoodProvider');
+  }
+  return context;
 };
 
-export const useFoodDetails = () => {
-  const { getDetails, details } = useFood();
-  return { getDetails, details };
-};
-
-export const useListFoods = () => {
-  const { list, foods } = useFood();
-  return { list, foods };
-};
+export default useFood;

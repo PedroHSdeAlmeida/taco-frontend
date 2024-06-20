@@ -1,23 +1,23 @@
+// src/components/FoodList.tsx
 import React from 'react';
+import useFood from '../hooks/useFood';
 
-interface FoodListProps {
-  foods: any[];
-  onFoodClick: (id: number) => void;
-}
+const FoodList = () => {
+  const { foods } = useFood();
 
-const FoodList: React.FC<FoodListProps> = ({ foods, onFoodClick }) => {
   if (!Array.isArray(foods)) {
-    return <div>No foods found</div>; // ou alguma mensagem de erro adequada
+    console.log(foods);
+    return <div>Erro: alimentos não encontrados</div>;
   }
 
   return (
-    <ul>
+    <div>
       {foods.map((food) => (
-        <li key={food.id} onClick={() => onFoodClick(food.id)}>
+        <div key={food.id}>
           {food.description}
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 

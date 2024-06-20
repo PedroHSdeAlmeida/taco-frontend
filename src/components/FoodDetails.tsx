@@ -1,33 +1,23 @@
 import React from 'react';
+import useFood from '../hooks/useFood';
 
-interface Nutrient {
-  id: string;
-  label: string;
-  value: number;
-  unit: string;
-  category: string;
-}
+const FoodDetails = () => {
+    const { foodDetails } = useFood();
 
-interface FoodDetailsProps {
-  details: {
-    description: string;
-    nutrients: Nutrient[];
-  };
-}
+    if (!foodDetails) return null;
 
-const FoodDetails: React.FC<FoodDetailsProps> = ({ details }) => {
-  return (
-    <div>
-      <h2>{details.description}</h2>
-      <ul>
-        {details.nutrients.map((nutrient) => (
-          <li key={nutrient.id}>
-            {nutrient.label}: {nutrient.value} {nutrient.unit} ({nutrient.category})
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div>
+            <h2>{foodDetails.name}</h2>
+            <ul>
+                {foodDetails.nutrients.map(nutrient => (
+                    <li key={nutrient.id}>
+                        {nutrient.label}: {nutrient.value} {nutrient.unit} ({nutrient.category})
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 export default FoodDetails;

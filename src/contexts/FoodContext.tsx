@@ -1,41 +1,37 @@
+// src/contexts/FoodContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { searchFood, getFoodDetails, listFoods } from '../services/foodService';
+import { Food, FoodDetails, FoodContextType } from '../types/foodTypes';
 
-interface FoodContextProps {
-  search: (term: string) => void;
-  getDetails: (id: number) => void;
-  list: (page: number, pageSize: number) => void;
-  foods: any[];
-  details: any;
-}
+const FoodContext = createContext<FoodContextType | undefined>(undefined);
 
 interface FoodProviderProps {
   children: ReactNode;
 }
 
-const FoodContext = createContext<FoodContextProps | undefined>(undefined);
-
-export const FoodProvider: React.FC<FoodProviderProps> = ({ children }) => {
-  const [foods, setFoods] = useState<any[]>([]);
-  const [details, setDetails] = useState<any>(null);
+export const FoodProvider = ({ children }: FoodProviderProps) => {
+  const [foods, setFoods] = useState<Food[]>([]);
+  const [foodDetails, setFoodDetails] = useState<FoodDetails | null>(null);
+  const [page, setPage] = useState(1);
 
   const search = async (term: string) => {
-    const result = await searchFood(term);
-    setFoods(result);
+    const data = await searchFood(term);
+    setFoods(data);
   };
 
   const getDetails = async (id: number) => {
-    const result = await getFoodDetails(id);
-    setDetails(result);
+    const data = await getFoodDetails(id);
+    setFoodDetails(data);
   };
 
-  const list = async (page: number, pageSize: number) => {
-    const result = await listFoods(page, pageSize);
-    setFoods(result);
+  const list = async (page: number) => {
+    const data = await listFoods(page, 10);
+    setFoods(data);
+    setPage(page);
   };
 
   return (
-    <FoodContext.Provider value={{ search, getDetails, list, foods, details }}>
+    <FoodContext.Provider value={{ foods, foodDetails, search, getDetails, list, page }}>
       {children}
     </FoodContext.Provider>
   );
@@ -48,3 +44,5 @@ export const useFood = () => {
   }
   return context;
 };
+
+export { FoodContext };

@@ -1,11 +1,12 @@
+// src/App.tsx
 import React from 'react';
-import Routes from './routes';
 import { FoodProvider } from './contexts/FoodContext';
+import HomePage from './pages/Home';
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <FoodProvider>
-      <Routes />
+      <HomePage />
     </FoodProvider>
   );
 };
