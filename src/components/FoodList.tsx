@@ -7,7 +7,7 @@ interface FoodListProps {
 
 const FoodList: React.FC<FoodListProps> = ({ foods, onFoodClick }) => {
   if (!Array.isArray(foods)) {
-    return <div>No foods found</div>;
+    return <div>No foods found</div>; // ou alguma mensagem de erro adequada
   }
 
   return (

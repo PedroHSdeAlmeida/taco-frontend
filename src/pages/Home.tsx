@@ -1,31 +1,40 @@
 import React, { useState } from 'react';
-import { useSearchFood, useFoodDetails, useListFoods } from '../hooks/useFood';
+import { useFood } from '../contexts/FoodContext';
 import FoodList from '../components/FoodList';
-import FoodDetails from '../components/FoodDetails';
 
 const Home: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { search, foods } = useSearchFood();
-  const { getDetails, details } = useFoodDetails();
-  const { list } = useListFoods();
+  const { search, foods, getDetails } = useFood();
+  const [term, setTerm] = useState('');
 
-  const handleSearch = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      search(searchTerm);
+  const handleSearch = () => {
+    search(term);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
     }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTerm(event.target.value);
+  };
+
+  const handleFoodClick = (id: number) => {
+    getDetails(id);
   };
 
   return (
     <div>
       <input
         type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        onKeyPress={handleSearch}
-        placeholder="Search for food..."
+        value={term}
+        onChange={handleChange}
+        onKeyDown={handleKeyPress}
+        placeholder="Search for food"
       />
-      <FoodList foods={foods} onFoodClick={getDetails} />
-      {details && <FoodDetails details={details} />}
+      <button onClick={handleSearch}>Search</button>
+      <FoodList foods={foods} onFoodClick={handleFoodClick} />
     </div>
   );
 };
